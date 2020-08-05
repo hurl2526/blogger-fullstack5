@@ -40,7 +40,7 @@ router.get('/blogById/:id', (req, res, next) => {
     });
 });
 
-router.post('/add-word', (req, res, next) => {
+router.post('/add', (req, res, next) => {
   if (
     !req.body.title ||
     !req.body.author ||
@@ -66,6 +66,34 @@ router.post('/add-word', (req, res, next) => {
   }
 });
 
+//start here in the morning
+router.put('/updateBlog/:id', (req, res, next) => {
+  Blog.findById(req.params.id).then((blog) => {
+    blog.title = req.body.title;
+    blog.author = req.body.author;
+    blog.subject = req.body.subject;
+    blog.article = req.body.article;
+    blog
+      .save()
+      .then(() => {
+        return res.json({ confirmation: 'Success', message: 'blog updated' });
+      })
+      .catch((err) => {
+        return res.status(504).json({ confirmation: 'Failed', message: err });
+      });
+  });
+});
 
+router.delete('/delete/:id', (req, res, next) => {
+  Blog.findByIdAndDelete(req.params.id)
+    .then((blog) => {
+      if (blog) {
+        return res.status(200).json({ message: 'Blog Deleted' });
+      } else {
+        return res.status(404).json({ message: 'No Blog To Delete' });
+      }
+    })
+    .catch((err) => res.status(404).json({ message: 'Blog Not Found' }));
+});
 
 module.exports = router;
