@@ -90,10 +90,10 @@ router.delete('/delete/:id', (req, res, next) => {
       if (blog) {
         return res.status(200).json({ message: 'Blog Deleted' });
       } else {
-        return res.status(404).json({ message: 'No Blog To Delete' });
+        return res.status(404).json({ message: 'Not found' });
       }
     })
-    .catch((err) => res.status(404).json({ message: 'Blog Not Found' }));
+    .catch((err) => res.status(404).json({ confirmation:'Failed',err }));
 });
 
 module.exports = router;
